@@ -1,0 +1,53 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.example.demo.model.Flight;
+import com.example.demo.service.flightService;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/flights")
+
+@RestController
+public class flightController {
+
+    @Autowired
+    private flightService flightService;
+
+    @RequestMapping(value = "/add/flight", method = RequestMethod.POST)
+    public Flight addFlight(@RequestBody Flight flight) {
+        return flightService.addFlight(flight);
+    }
+
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public List<Flight> getAllFlights() {
+        return flightService.getAllFlights();
+    }
+
+    @RequestMapping(value = "/update/flight/{id}", method = RequestMethod.PUT)
+    public Flight updateFlight(@PathVariable Long id, @RequestBody Flight updated) {
+        return flightService.updateFlight(id, updated)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Flight not found with id=" + id));
+    }
+
+    @RequestMapping(value = "/delete/flight/{id}", method = RequestMethod.DELETE)
+    public void deleteFlight(@PathVariable Long id) {
+        boolean removed = flightService.deleteFlight(id);
+        if (!removed) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Flight not found with id=" + id);
+        }
+    }
+}

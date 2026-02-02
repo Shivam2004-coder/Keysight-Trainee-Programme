@@ -1,0 +1,67 @@
+package com.example.bookmanagement.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.bookmanagement.model.Book;
+import com.example.bookmanagement.repository.BookRepository;
+
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    // 1. getAllBooks
+    @GetMapping
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    // 2. getBookById
+//    @GetMapping("/{id}")
+//    public Book getBookById(@PathVariable Long id) {
+//        return bookRepository.findById(id).orElse(null);
+//    }
+    @GetMapping("/{id}")
+    public Book getBookById(@PathVariable Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+    }
+
+
+
+    // 3. createBook
+    @PostMapping
+    public Book createBook(@RequestBody Book book) {
+        return bookRepository.save(book);
+    }
+
+    // 4. updateBookById
+    @PutMapping("/{id}")
+    public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
+        book.setId(id);
+        return bookRepository.save(book);
+    }
+
+    // 5. deleteBook
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    // 6. deleteAllBooks
+    @DeleteMapping
+    public void deleteAllBooks() {
+        bookRepository.deleteAll();
+    }
+
+    // 7. findByPublishedYear
+    @GetMapping("/year/{year}")
+    public List<Book> findByPublishedYear(@PathVariable int year) {
+        return bookRepository.findByPublishedYear(year);
+    }
+}

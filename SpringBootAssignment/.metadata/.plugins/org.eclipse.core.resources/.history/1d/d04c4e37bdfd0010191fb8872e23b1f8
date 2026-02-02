@@ -1,0 +1,45 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.example.demo.model.Flight;
+import com.example.demo.service.FlightService;
+
+@RestController
+@RequestMapping("/flights")
+public class FlightController {
+
+    @Autowired
+    private FlightService flightService;
+
+    @PostMapping("/add")
+    public Flight addFlight(@RequestBody Flight flight) {
+        return flightService.addFlight(flight);
+    }
+
+    @GetMapping("/all")
+    public List<Flight> getAllFlights() {
+        return flightService.getAllFlights();
+    }
+
+    @PutMapping("/update/{id}")
+    public Flight updateFlight(@PathVariable Long id, @RequestBody Flight updated) {
+        return flightService.updateFlight(id, updated)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Flight not found with id=" + id));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteFlight(@PathVariable Long id) {
+        boolean removed = flightService.deleteFlight(id);
+        if (!removed) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Flight not found with id=" + id);
+        }
+    }
+}
