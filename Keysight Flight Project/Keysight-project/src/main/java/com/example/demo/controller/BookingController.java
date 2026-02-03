@@ -18,11 +18,18 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/book")
-    public ResponseEntity<?> bookFlight(@RequestBody Map<String, Long> payload) {
+    public ResponseEntity<?> bookFlight(@RequestBody Map<String, Object> payload) {
         try {
-            Long userId = payload.get("userId");
-            Long flightId = payload.get("flightId");
-            Booking booking = bookingService.createBooking(userId, flightId);
+            Long userId = Long.valueOf(payload.get("userId").toString());
+            Long flightId = Long.valueOf(payload.get("flightId").toString());
+            String passengerName = (String) payload.get("passengerName");
+            Integer passengerAge = Integer.valueOf(payload.get("passengerAge").toString());
+            String passengerPhoneNumber = (String) payload.get("passengerPhoneNumber");
+            String passengerAadhaar = (String) payload.get("passengerAadhaar");
+            String passengerPan = (String) payload.get("passengerPan");
+
+            Booking booking = bookingService.createBooking(userId, flightId, passengerName, passengerAge,
+                    passengerPhoneNumber, passengerAadhaar, passengerPan);
             return ResponseEntity.ok(booking);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

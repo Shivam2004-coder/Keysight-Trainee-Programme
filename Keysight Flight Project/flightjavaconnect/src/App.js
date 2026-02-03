@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AddFlight from "./components/AddFlight";
 import EditFlight from "./components/EditFlight";
 import FlightList from "./components/FlightList";
@@ -10,6 +10,7 @@ import BookedFlights from "./components/BookedFlights";
 import { Route, Routes, Link, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import './App.css';
+import logo from './assets/logo.png';
 
 // Component to protect routes generic
 const ProtectedRoute = ({ children }) => {
@@ -41,9 +42,16 @@ const UserRoute = ({ children }) => {
   return children;
 };
 
+
+// ... other imports
+
 // Component for Navigation Bar (only shown when logged in)
 const NavBar = () => {
   const { user, logout } = useAuth();
+
+  // Don't show navbar on login/register pages if that was the intent, 
+  // but the user logic in App.js only checks (!user). 
+  // If user is logged in, they see the navbar.
 
   if (!user) return null;
 
@@ -51,13 +59,17 @@ const NavBar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light navbar-custom mb-4 p-3 sticky-top">
-      <div className="container">
-        <span className="navbar-brand">Flight Portal</span>
+      <div className="container-fluid px-5">
+        <Link to="/" className="navbar-brand d-flex align-items-center">
+          <img src={logo} alt="Shiva Airlines Logo" style={{ height: '50px', marginRight: '15px' }} />
+          <span className="font-weight-bold" style={{ fontSize: '1.5rem', color: 'var(--accent-primary)' }}>Shiva Airlines</span>
+        </Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <div className="ml-auto d-flex align-items-center">
+          {/* Navigation Links - Pushed to the left next to Brand */}
+          <div className="navbar-nav mr-auto d-flex flex-row align-items-center">
             <Link to="/" className="nav-link text-secondary font-weight-bold mx-2">Flights</Link>
             {isAdmin && (
               <Link to="/add" className="nav-link text-secondary font-weight-bold mx-2">Add Flight</Link>
@@ -65,7 +77,11 @@ const NavBar = () => {
             {!isAdmin && (
               <Link to="/my-bookings" className="nav-link text-secondary font-weight-bold mx-2">Booked Flights</Link>
             )}
-            <button onClick={logout} className="btn btn-premium btn-sm ml-3">Logout</button>
+          </div>
+
+          {/* Logout Button - Pushed to the extreme right */}
+          <div className="navbar-nav">
+            <button onClick={logout} className="btn btn-premium btn-sm shadow-sm">Logout</button>
           </div>
         </div>
       </div>
@@ -74,6 +90,10 @@ const NavBar = () => {
 };
 
 function App() {
+  useEffect(() => {
+    document.title = "Shiva Airlines";
+  }, []);
+
   return (
     <AuthProvider>
       <div className="App">

@@ -31,6 +31,23 @@ const FlightInfo = () => {
         }
     };
 
+    const formatTime = (timeStr) => {
+        if (!timeStr) return "N/A";
+        // Remove decimal if present (e.g. "752.0" -> "752")
+        let cleanStr = timeStr.toString().split('.')[0];
+
+        // Pad with leading zeros to ensure at least 4 digits (e.g. "752" -> "0752")
+        while (cleanStr.length < 4) {
+            cleanStr = "0" + cleanStr;
+        }
+
+        // Extract hours and minutes
+        const hours = cleanStr.slice(0, 2);
+        const minutes = cleanStr.slice(2);
+
+        return `${hours}:${minutes}`;
+    };
+
     if (loading) {
         return <div className="container mt-5"><h3>Loading...</h3></div>;
     }
@@ -76,11 +93,11 @@ const FlightInfo = () => {
                     <div className="row mb-5">
                         <div className="col-md-4 mb-3">
                             <h6 className="text-secondary text-uppercase text-xs font-weight-bolder">Departure</h6>
-                            <p className="text-dark font-weight-bold">{flight.depTime}</p>
+                            <p className="text-dark font-weight-bold">{formatTime(flight.depTime)}</p>
                         </div>
                         <div className="col-md-4 mb-3">
                             <h6 className="text-secondary text-uppercase text-xs font-weight-bolder">Arrival</h6>
-                            <p className="text-dark font-weight-bold">{flight.arrTime}</p>
+                            <p className="text-dark font-weight-bold">{formatTime(flight.arrTime)}</p>
                         </div>
                         <div className="col-md-4 mb-3">
                             <h6 className="text-secondary text-uppercase text-xs font-weight-bolder">Duration</h6>

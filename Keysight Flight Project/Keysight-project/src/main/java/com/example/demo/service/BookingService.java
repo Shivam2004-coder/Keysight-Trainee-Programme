@@ -24,7 +24,8 @@ public class BookingService {
     @Autowired
     private flightService flightService; // Assuming lowercase class name based on previous files
 
-    public Booking createBooking(Long userId, Long flightId) {
+    public Booking createBooking(Long userId, Long flightId, String passengerName, Integer passengerAge,
+            String passengerPhoneNumber, String passengerAadhaar, String passengerPan) {
         Optional<User> userOpt = userRepository.findById(userId);
         Optional<Flight> flightOpt = flightService.getById(flightId);
 
@@ -33,6 +34,11 @@ public class BookingService {
             booking.setUser(userOpt.get());
             booking.setFlight(flightOpt.get());
             booking.setBookingDate(LocalDate.now());
+            booking.setPassengerName(passengerName);
+            booking.setPassengerAge(passengerAge);
+            booking.setPassengerPhoneNumber(passengerPhoneNumber);
+            booking.setPassengerAadhaar(passengerAadhaar);
+            booking.setPassengerPan(passengerPan);
             return bookingRepository.save(booking);
         }
         throw new RuntimeException("User or Flight not found");

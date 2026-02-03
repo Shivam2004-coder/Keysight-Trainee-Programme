@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+import logo from '../assets/logo.png';
+
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -41,7 +43,10 @@ function Login() {
 
     return (
         <div className="container mt-5" style={{ maxWidth: '400px' }}>
-            <h3 className="text-center mb-4 font-weight-bold" style={{ color: 'var(--accent-primary)' }}>Login</h3>
+            <div className="text-center mb-4">
+                <img src={logo} alt="Shiva Airlines" style={{ height: '80px', marginBottom: '15px' }} />
+                <h3 className="font-weight-bold" style={{ color: 'var(--accent-primary)' }}>Shiva Airlines</h3>
+            </div>
             <div className="glass-panel p-5">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group mb-4">

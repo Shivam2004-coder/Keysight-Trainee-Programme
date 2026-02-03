@@ -21,13 +21,25 @@ public class Booking {
 
     private LocalDate bookingDate;
 
+    private String passengerName;
+    private Integer passengerAge;
+    private String passengerPhoneNumber;
+    private String passengerAadhaar;
+    private String passengerPan;
+
     public Booking() {
     }
 
-    public Booking(User user, Flight flight, LocalDate bookingDate) {
+    public Booking(User user, Flight flight, LocalDate bookingDate, String passengerName, Integer passengerAge,
+            String passengerPhoneNumber, String passengerAadhaar, String passengerPan) {
         this.user = user;
         this.flight = flight;
         this.bookingDate = bookingDate;
+        this.passengerName = passengerName;
+        this.passengerAge = passengerAge;
+        this.passengerPhoneNumber = passengerPhoneNumber;
+        this.passengerAadhaar = passengerAadhaar;
+        this.passengerPan = passengerPan;
     }
 
     public Long getId() {
@@ -60,5 +72,45 @@ public class Booking {
 
     public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
+    }
+
+    public String getPassengerName() {
+        return passengerName;
+    }
+
+    public void setPassengerName(String passengerName) {
+        this.passengerName = passengerName;
+    }
+
+    public Integer getPassengerAge() {
+        return passengerAge;
+    }
+
+    public void setPassengerAge(Integer passengerAge) {
+        this.passengerAge = passengerAge;
+    }
+
+    public String getPassengerPhoneNumber() {
+        return passengerPhoneNumber;
+    }
+
+    public void setPassengerPhoneNumber(String passengerPhoneNumber) {
+        this.passengerPhoneNumber = passengerPhoneNumber;
+    }
+
+    public String getPassengerAadhaar() {
+        return passengerAadhaar;
+    }
+
+    public void setPassengerAadhaar(String passengerAadhaar) {
+        this.passengerAadhaar = passengerAadhaar;
+    }
+
+    public String getPassengerPan() {
+        return passengerPan;
+    }
+
+    public void setPassengerPan(String passengerPan) {
+        this.passengerPan = passengerPan;
     }
 }

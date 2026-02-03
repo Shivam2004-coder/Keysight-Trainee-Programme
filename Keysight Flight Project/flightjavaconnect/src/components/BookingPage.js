@@ -8,6 +8,15 @@ const BookingPage = () => {
     const navigate = useNavigate();
     const [flight, setFlight] = useState(null);
 
+    // Form State
+    const [formData, setFormData] = useState({
+        passengerName: '',
+        passengerAge: '',
+        passengerPhoneNumber: '',
+        passengerAadhaar: '',
+        passengerPan: ''
+    });
+
     useEffect(() => {
         const loadFlight = async () => {
             const res = await fetch(`http://localhost:6161/flight/${id}`);
@@ -17,7 +26,18 @@ const BookingPage = () => {
         loadFlight();
     }, [id]);
 
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const handleBooking = async () => {
+        // Validation
+        const { passengerName, passengerAge, passengerPhoneNumber, passengerAadhaar, passengerPan } = formData;
+        if (!passengerName || !passengerAge || !passengerPhoneNumber || !passengerAadhaar || !passengerPan) {
+            alert("Please fill in all passenger details.");
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:6161/api/bookings/book', {
                 method: 'POST',
@@ -26,7 +46,8 @@ const BookingPage = () => {
                 },
                 body: JSON.stringify({
                     userId: user.id,
-                    flightId: flight.id
+                    flightId: flight.id,
+                    ...formData
                 }),
             });
 
@@ -45,37 +66,65 @@ const BookingPage = () => {
     if (!flight) return <div className="container mt-5">Loading...</div>;
 
     return (
-        <div className="container mt-5" style={{ maxWidth: '600px' }}>
+        <div className="container mt-5" style={{ maxWidth: '800px' }}>
             <h2 className="mb-4 text-center font-weight-bold" style={{ color: 'var(--accent-primary)' }}>Confirm Booking</h2>
-            <div className="glass-panel p-5 text-center">
-                <h4 className="font-weight-bold mb-3" style={{ color: 'var(--accent-secondary)' }}>{flight.flightName}</h4>
-                <div className="mb-4">
-                    <p className="text-secondary mb-1">Carrier</p>
-                    <h5 className="text-dark font-weight-bold">{flight.carrier}</h5>
-                </div>
 
-                <div className="d-flex justify-content-center align-items-center mb-4">
-                    <div className="text-right mr-4">
-                        <p className="text-secondary mb-0">From</p>
-                        <h4 className="text-dark font-weight-bold">{flight.source}</h4>
+            <div className="row">
+                <div className="col-md-6">
+                    <div className="glass-panel p-4 h-100">
+                        <h4 className="font-weight-bold mb-3" style={{ color: 'var(--accent-secondary)' }}>Flight Summary</h4>
+                        <div className="mb-3">
+                            <small className="text-secondary text-uppercase font-weight-bold">Flight</small>
+                            <h5 className="font-weight-bold text-dark">{flight.flightName}</h5>
+                        </div>
+                        <div className="mb-3">
+                            <small className="text-secondary text-uppercase font-weight-bold">Route</small>
+                            <p className="font-weight-bold text-dark mb-0">{flight.source} ➝ {flight.destination}</p>
+                        </div>
+                        <div className="mb-3 p-3 rounded" style={{ background: 'rgba(120, 53, 15, 0.05)', border: '1px solid var(--glass-border)' }}>
+                            <small className="text-secondary text-uppercase font-weight-bold">Total Price</small>
+                            <h2 className="font-weight-bold mb-0" style={{ color: 'var(--accent-primary)' }}>${flight.price}</h2>
+                        </div>
                     </div>
-                    <div className="text-secondary mx-3">➝</div>
-                    <div className="text-left ml-4">
-                        <p className="text-secondary mb-0">To</p>
-                        <h4 className="text-dark font-weight-bold">{flight.destination}</h4>
+                </div>
+
+                <div className="col-md-6">
+                    <div className="glass-panel p-4">
+                        <h4 className="font-weight-bold mb-3" style={{ color: 'var(--accent-secondary)' }}>Passenger Details</h4>
+
+                        <div className="form-group mb-3">
+                            <label className="text-sm font-weight-bold text-secondary">Full Name</label>
+                            <input type="text" name="passengerName" value={formData.passengerName} onChange={handleChange} className="form-control" placeholder="Enter full name" />
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group col-md-6 mb-3">
+                                <label className="text-sm font-weight-bold text-secondary">Age</label>
+                                <input type="number" name="passengerAge" value={formData.passengerAge} onChange={handleChange} className="form-control" placeholder="Age" />
+                            </div>
+                            <div className="form-group col-md-6 mb-3">
+                                <label className="text-sm font-weight-bold text-secondary">Phone Number</label>
+                                <input type="text" name="passengerPhoneNumber" value={formData.passengerPhoneNumber} onChange={handleChange} className="form-control" placeholder="Phone" />
+                            </div>
+                        </div>
+
+                        <div className="form-group mb-3">
+                            <label className="text-sm font-weight-bold text-secondary">Aadhaar Number</label>
+                            <input type="text" name="passengerAadhaar" value={formData.passengerAadhaar} onChange={handleChange} className="form-control" placeholder="12-digit Aadhaar" />
+                        </div>
+
+                        <div className="form-group mb-4">
+                            <label className="text-sm font-weight-bold text-secondary">PAN Card Number</label>
+                            <input type="text" name="passengerPan" value={formData.passengerPan} onChange={handleChange} className="form-control" placeholder="PAN Number" />
+                        </div>
+
+                        <button onClick={handleBooking} className="btn btn-premium btn-lg w-100 shadow-lg">
+                            Pay Now
+                        </button>
+                        <div className="mt-3 text-center">
+                            <button onClick={() => navigate(-1)} className="btn btn-link text-secondary">Cancel</button>
+                        </div>
                     </div>
-                </div>
-
-                <div className="mb-5 p-3 rounded" style={{ background: 'rgba(120, 53, 15, 0.05)', border: '1px solid var(--glass-border)' }}>
-                    <p className="text-secondary mb-1">Total Price</p>
-                    <h1 className="font-weight-bold display-4" style={{ color: 'var(--accent-primary)' }}>${flight.price}</h1>
-                </div>
-
-                <button onClick={handleBooking} className="btn btn-premium btn-lg w-100 shadow-lg">
-                    Confirm & Pay
-                </button>
-                <div className="mt-3">
-                    <button onClick={() => navigate(-1)} className="btn btn-link text-secondary">Cancel</button>
                 </div>
             </div>
         </div>
