@@ -31,15 +31,34 @@ public class flightService {
 
     public Optional<Flight> updateFlight(Long id, Flight updated) {
         return repo.findById(id).map(existing -> {
-            if (updated.getFlightName() != null)  existing.setFlightName(updated.getFlightName());
-            if (updated.getSource() != null)      existing.setSource(updated.getSource());
-            if (updated.getDestination() != null) existing.setDestination(updated.getDestination());
+            if (updated.getFlightName() != null)
+                existing.setFlightName(updated.getFlightName());
+            if (updated.getSource() != null)
+                existing.setSource(updated.getSource());
+            if (updated.getDestination() != null)
+                existing.setDestination(updated.getDestination());
+            if (updated.getPrice() != null)
+                existing.setPrice(updated.getPrice());
+            if (updated.getDistance() != null)
+                existing.setDistance(updated.getDistance());
+            if (updated.getCarrier() != null)
+                existing.setCarrier(updated.getCarrier());
+            if (updated.getTailnum() != null)
+                existing.setTailnum(updated.getTailnum());
+            if (updated.getDepTime() != null)
+                existing.setDepTime(updated.getDepTime());
+            if (updated.getArrTime() != null)
+                existing.setArrTime(updated.getArrTime());
+            if (updated.getAirTime() != null)
+                existing.setAirTime(updated.getAirTime());
+
             return repo.save(existing);
         });
     }
 
     public boolean deleteFlight(Long id) {
-        if (!repo.existsById(id)) return false;
+        if (!repo.existsById(id))
+            return false;
         repo.deleteById(id);
         return true;
     }
