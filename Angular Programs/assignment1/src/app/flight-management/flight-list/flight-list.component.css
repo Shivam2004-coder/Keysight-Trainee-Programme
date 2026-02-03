@@ -1,0 +1,24 @@
+/* .on-time { color: green; }
+.delayed { color: orange; }
+.cancelled { color: red; } */
+
+.flight-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.on-time {
+  background-color: #d4edda;
+  color: green;
+}
+
+.delayed {
+  background-color: #fff3cd;
+  color: orange;
+}
+
+.cancelled {
+  background-color: #f8d7da;
+  color: red;
+}

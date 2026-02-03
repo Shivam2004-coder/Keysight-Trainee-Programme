@@ -1,0 +1,24 @@
+{
+  "flights": [
+    {
+      "id": 1,
+      "flightNo": "AI101",
+      "airline": "Indigo",
+      "source": "DEL",
+      "destination": "MUM",
+      "time": "2026-01-20T10:30",
+      "price": 4500,
+      "status": "On Time"
+    },
+    {
+      "id": 2,
+      "flightNo": "BA202",
+      "airline": "Emirates",
+      "source": "DXB",
+      "destination": "NYC",
+      "time": "2026-01-20T21:45",
+      "price": 85000,
+      "status": "Delayed"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="flightApp">
+<head>
+  <title>Flight Management System</title>
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+  <!-- App Files -->
+  <script src="app/app.module.js"></script>
+  <script src="app/app.config.js"></script>
+
+  <script src="app/services/flight.service.js"></script>
+  <script src="app/controllers/flight.controller.js"></script>
+
+</head>
+<body ng-controller="FlightController"
+>
+
+<h2>Flight Management System</h2>
+
+<!-- FILTER -->
+<input type="text" ng-model="searchText" placeholder="Search Source / Destination">
+
+<!-- TABLE -->
+  <table border="1" cellpadding="5">
+    <tr>
+      <th>Flight No</th>
+      <th>Airline</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Time</th>
+      <th>
+        Price
+      </th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    
+    <tr ng-repeat="flight in flights 
+    | filter:searchText 
+    | orderBy:sortField">
+    
+    <td>{{flight.flightNo}}</td>
+    <td>{{flight.airline | uppercase}}</td>
+    <td>{{flight.source}}</td>
+    <td>{{flight.destination}}</td>
+    <td>{{flight.time | date:'shortTime'}}</td>
+    <td>{{flight.price | currency:'₹'}}</td>
+    <td>{{flight.status}}</td>
+    
+    <td>
+      <button ng-click="updateStatus(flight)">Edit</button>
+      <button ng-click="deleteFlight(flight.id)">Delete</button>
+    </td>
+  </tr>
+</table>
+
+<hr>
+
+<!-- ADD FLIGHT -->
+<h3>Add Flight</h3>
+
+<input ng-model="newFlight.flightNo" placeholder="Flight No">
+<input ng-model="newFlight.airline" placeholder="Airline">
+<input ng-model="newFlight.source" placeholder="From">
+<input ng-model="newFlight.destination" placeholder="To">
+<input ng-model="newFlight.time" type="datetime-local">
+<input ng-model="newFlight.price" placeholder="Price">
+<select ng-model="newFlight.status">
+  <option>On Time</option>
+  <option>Delayed</option>
+  <option>Cancelled</option>
+</select>
+
+<button ng-click="addFlight()">Add</button>
+
+<app-root></app-root>  
+</body>
+</html>
