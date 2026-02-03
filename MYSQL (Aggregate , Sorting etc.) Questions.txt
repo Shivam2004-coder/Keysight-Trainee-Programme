@@ -1,0 +1,43 @@
+Questions: (Aggregate , Filtering , Grouping and Sorting)
+
+(f) Find the average price of all products
+SELECT AVG(price) AS average_price
+FROM products;
+
+(g) Find the maximum and minimum price of products in the "Electronics" category
+SELECT 
+    MAX(p.price) AS max_price,
+    MIN(p.price) AS min_price
+FROM products p
+JOIN categories c ON p.category_id = c.category_id
+WHERE c.category_name = 'Electronics';
+
+(i) List suppliers who supply products priced between $50 and $200
+SELECT DISTINCT s.supplier_name
+FROM suppliers s
+JOIN products p ON s.supplier_id = p.supplier_id
+WHERE p.price BETWEEN 50 AND 200;
+
+(l) Products grouped by supplier, average price per supplier > 100
+SELECT 
+    s.supplier_name,
+    AVG(p.price) AS avg_price
+FROM suppliers s
+JOIN products p ON s.supplier_id = p.supplier_id
+GROUP BY s.supplier_id, s.supplier_name
+HAVING AVG(p.price) > 100;
+
+(m) List all products sorted by price (descending)
+SELECT product_name, price
+FROM products
+ORDER BY price DESC;
+
+(n) Total value of stock per category
+SELECT 
+    c.category_name,
+    SUM(p.price * p.stock_quantity) AS total_stock_value
+FROM categories c
+JOIN products p ON c.category_id = p.category_id
+GROUP BY c.category_id, c.category_name
+ORDER BY total_stock_value DESC;
+
